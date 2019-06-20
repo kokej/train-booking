@@ -1,18 +1,25 @@
 import { BrowserModule } from '@angular/platform-browser';
-import { NgModule } from '@angular/core';
+import { NgModule, Injector } from '@angular/core';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { createCustomElement } from '@angular/elements';
+import { BookingComponent } from './booking/booking.component';
+
 @NgModule({
-  declarations: [
-    AppComponent
-  ],
-  imports: [
-    BrowserModule,
-    AppRoutingModule
-  ],
+  declarations: [AppComponent, BookingComponent],
+  imports: [BrowserModule, AppRoutingModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [],
+  entryComponents: [BookingComponent]
 })
-export class AppModule { }
+export class AppModule {
+  constructor(private injector: Injector) {}
+  ngDoBootstrap() {
+    const myCustomElement = createCustomElement(BookingComponent, {
+      injector: this.injector
+    });
+    customElements.define('app-train-booking', myCustomElement);
+  }
+}
